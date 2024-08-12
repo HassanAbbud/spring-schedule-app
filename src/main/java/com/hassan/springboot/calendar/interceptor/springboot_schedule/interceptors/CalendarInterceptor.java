@@ -1,11 +1,15 @@
 package com.hassan.springboot.calendar.interceptor.springboot_schedule.interceptors;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,7 +35,17 @@ public class CalendarInterceptor implements HandlerInterceptor{
             request.setAttribute("message", message.toString());
             return true;
         }
-        
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> data = new HashMap<>();
+        StringBuilder message = new StringBuilder("You are outside operating system hours");
+        message.append(", this service runs from " + open + "am to " + close + "pm");
+        data.put("message", message.toString());
+
+
+        response.setContentType("application/json");
+        response.setStatus(401);
+        response.getWriter().write(mapper.writeValueAsString(data));
         return false;
         
     }
