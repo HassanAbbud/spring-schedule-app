@@ -15,9 +15,11 @@ public class MvcConfig implements WebMvcConfigurer{
     @Qualifier("calendarInterceptor")
     private CalendarInterceptor calendarInterceptor;
 
+    //add the interceptor to all routes
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(calendarInterceptor);
+        //.add/excludePathPatterns delimits the paths that will be affected by the interceptor
     }
     
 }
